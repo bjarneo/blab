@@ -31,11 +31,26 @@ net.createServer(function (socket) {
     }
 
     function changeNick(data) {
-        var oldName = socket.name;
+        var taken = false,
+            oldName = socket.name,
+            newName = data.toString().split(' ')[1].replace(/(\r\n|\n|\r)/gm, '');
+
+        // Check if nick aleady exists
+        each(clients, function(client) {
+            if (client.name === newName) {
+                taken = true;
+            }
+        });
+
+        if (taken) {
+            broadcast('* Sorry ' + oldName + ' name ' + newName + ' is already in use *\n');
+
+            return;
+        }
 
         clients.pop(socket);
 
-        socket.name = data.toString().split(' ')[1].replace(/(\r\n|\n|\r)/gm, '');
+        socket.name = newName;
 
         clients.push(socket);
 
