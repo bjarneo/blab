@@ -2,14 +2,14 @@
 'use strict';
 
 var net = require('net'),
-    Welcome = require('./lib/welcome'),
-    Users = require('./lib/users'),
-    Utils = require('./lib/utilities');
+    welcome = require('./lib/welcome'),
+    users = require('./lib/users'),
+    utils = require('./lib/utilities');
 
 net.createServer(function (socket) {
     // Send message to clients
     function broadcast(message) {
-        Utils.each(Users.getUsers(), function(user) {
+        utils.each(users.getUsers(), function(user) {
             user.write(message);
         });
 
@@ -21,16 +21,16 @@ net.createServer(function (socket) {
     socket.setKeepAlive(true);
 
     // Add user
-    Users.addUser(socket);
+    users.addUser(socket);
 
     // Welcome user
-    Welcome.ahouy(socket);
+    welcome.ahouy(socket);
 
     broadcast(socket.name + ' joined the chat\n');
 
     socket.on('data', function (data) {
-        if (Utils.contains(data, '/name ') !== -1) {
-            Users.changeUserName(socket, data, broadcast);
+        if (utils.contains(data, '/name ') !== -1) {
+            users.changeUserName(socket, data, broadcast);
 
             return;
         }
@@ -40,7 +40,7 @@ net.createServer(function (socket) {
 
     // Remove the client from the list when it leaves
     socket.on('end', function () {
-        Users.removeUser(socket);
+        users.removeUser(socket);
 
         broadcast(socket.name + ' left the chat.\n');
     });
