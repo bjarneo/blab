@@ -20,8 +20,8 @@ net.createServer(function (socket) {
     // Socket settings
     socket.setKeepAlive(true);
 
-    // Create user
-    Users.createUser(socket);
+    // Add user
+    Users.addUser(socket);
 
     // Welcome user
     Welcome.ahouy(socket);
@@ -40,7 +40,7 @@ net.createServer(function (socket) {
 
     // Remove the client from the list when it leaves
     socket.on('end', function () {
-        Users.getUsers().splice(Users.getUser(socket), 1);
+        Users.removeUser(socket);
 
         broadcast(socket.name + ' left the chat.\n');
     });
