@@ -1,9 +1,8 @@
-/* jslint node: true */
 'use strict';
 
 var net = require('net'),
     users = require('./lib/users'),
-    utils = require('./lib/utilities');
+    commands = require('./lib/commands');
 
 net.createServer(function(socket) {
     // Socket settings
@@ -19,7 +18,7 @@ net.createServer(function(socket) {
     users.messageUsers(socket.name + ' joined the chat\n');
 
     socket.on('data', function (data) {
-        if (utils.contains(data, '/name ') !== -1) {
+        if (commands.exists(data, '/name ')) {
             users.changeUserName(socket, data);
 
             return;
