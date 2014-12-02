@@ -13,13 +13,23 @@ net.createServer(function(socket) {
 
     // Welcome and inform user
     users.messageUser(socket, 'Welcome ' + socket.name + '\n');
-    users.messageUser(socket, 'To change your name simply type: /name myNickBrah\n');
+    users.messageUser(socket, 'Type /help for commands\n');
 
     users.messageUsers(socket.name + ' joined the chat\n');
 
     socket.on('data', function (data) {
-        if (commands.exists(data, '/name ')) {
+        if (commands.exists(data, '/name')) {
             users.changeUserName(socket, data);
+
+            return;
+        } else if (commands.exists(data, '/exit')) {
+            users.removeUser(socket);
+
+            socket.end();
+
+            return;
+        } else if (commands.exists(data, '/help')) {
+            users.messageUser(socket, ' * /name newName\n * /exit (for exit)\n');
 
             return;
         }
