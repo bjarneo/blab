@@ -17,6 +17,7 @@ net.createServer(function(socket) {
 
     users.messageUsers(socket.name + ' joined the chat\n');
 
+    // Handle data
     socket.on('data', function (data) {
         if (commands.exists(data, '/name')) {
             users.changeUserName(socket, data);
