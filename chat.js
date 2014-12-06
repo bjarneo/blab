@@ -4,33 +4,38 @@ var net = require('net'),
     users = require('./lib/users'),
     commands = require('./lib/commands');
 
-net.createServer(function(socket) {
+net.createServer(function (socket) {
     // Socket settings
     socket.setKeepAlive(true);
 
+    // Set socket
+    users.setSocket(socket);
+
     // Add user
-    users.addUser(socket);
+    users.addUser();
 
     // Welcome and inform user
-    users.messageUser(socket, 'Welcome ' + socket.name + '\n');
-    users.messageUser(socket, 'Type /help for commands\n');
+    users.messageUser('Welcome ' + socket.name + '\n');
+    users.messageUser('Type /help for commands\n');
 
     users.messageUsers(socket.name + ' joined the chat\n');
 
     // Handle data
     socket.on('data', function (data) {
+        users.setData(data);
+
         if (commands.exists(data, '/name')) {
-            users.changeUserName(socket, data);
+            users.changeUserName();
 
             return;
         } else if (commands.exists(data, '/exit')) {
-            users.removeUser(socket);
+            users.removeUser();
 
             socket.end();
 
             return;
         } else if (commands.exists(data, '/help')) {
-            users.messageUser(socket, ' * /name newName\n * /exit (for exit)\n');
+            users.messageUser(' * /name newName\n * /exit (for exit)\n');
 
             return;
         }
@@ -40,7 +45,7 @@ net.createServer(function(socket) {
 
     // Remove the client from the list when it leaves
     socket.on('end', function () {
-        users.removeUser(socket);
+        users.removeUser();
 
         users.messageUsers(socket.name + ' left the chat.\n');
     });
