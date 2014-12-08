@@ -38,9 +38,9 @@ net.createServer(function (socket) {
             users.messageUser(' * /name newName\n * /exit (for exit)\n');
 
             return;
+        } else {
+            users.messageUsers(socket.name + ' > ' + data);
         }
-
-        users.messageUsers(socket.name + ' > ' + data);
     });
 
     // Remove the client from the list when it leaves
