@@ -15,10 +15,10 @@ net.createServer(function (socket) {
     users.addUser();
 
     // Welcome and inform user
-    users.messageUser('Welcome ' + socket.name + '\n');
-    users.messageUser('Type /help for commands\n');
+    users.messageUser('Welcome ' + socket.name + '');
+    users.messageUser('Type /help for commands');
 
-    users.messageUsers(socket.name + ' joined the chat\n');
+    users.messageUsers(socket.name + ' joined the chat');
 
     // Handle data
     socket.on('data', function (data) {
@@ -35,7 +35,7 @@ net.createServer(function (socket) {
 
             return;
         } else if (commands.exists(data, '/help')) {
-            users.messageUser(' * /name newName\n * /exit (for exit)\n');
+            users.messageUser(' * /name newName\n * /exit (for exit)');
 
             return;
         } else {
@@ -47,7 +47,7 @@ net.createServer(function (socket) {
     socket.on('end', function () {
         users.removeUser();
 
-        users.messageUsers(socket.name + ' left the chat.\n');
+        users.messageUsers(socket.name + ' left the chat.');
     });
 }).listen(5000);
 
