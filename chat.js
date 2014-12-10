@@ -18,7 +18,7 @@ net.createServer(function (socket) {
     users.messageUser('Welcome ' + socket.name + '');
     users.messageUser('Type /help for commands');
 
-    users.messageUsers(socket.name + ' joined the chat');
+    users.messageUsers(socket.name + ' joined the chat\n');
 
     // Handle data
     socket.on('data', function (data) {
